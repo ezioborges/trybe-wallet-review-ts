@@ -1,4 +1,5 @@
 import { combineReducers } from "redux";
+import { loginReducer } from "./loginReducer";
 import { INCREMENT_COUNT } from "../actions";
 
 type ActionType = {
@@ -23,6 +24,6 @@ export const exempleReducer = (state = INITIAL_STATE, action: ActionType) => {
   }
 };
 
-const rootReducer = combineReducers({ exempleReducer });
+const rootReducer = combineReducers({ exempleReducer, loginReducer });
 
 export default rootReducer;

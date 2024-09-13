@@ -1,9 +1,10 @@
-import { composeWithDevTools } from "@redux-devtools/extension";
-import { applyMiddleware, legacy_createStore as createStore } from "redux";
-import rootReducer from "./reducers";
-import { thunk } from "redux-thunk";
+import { configureStore } from '@reduxjs/toolkit';
+// import rootReducer from './reducers';
+import { loginReducer } from './reducers/loginReducer';
 
-//vai parar de reclamar quando eu tiver mais de um reducer no combiners...
-const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)))
+const store = configureStore({
+  reducer: loginReducer,
+  devTools: process.env.NODE_ENV !== 'production',
+});
 
 export default store;
