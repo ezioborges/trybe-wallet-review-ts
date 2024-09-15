@@ -1,6 +1,8 @@
+import WalletForm from "../components/WalletForm";
+
 function Wallet() {
     return (
-        <h1>Aqui vai ser o wallet</h1>
+        <WalletForm />
     )
 }
 
