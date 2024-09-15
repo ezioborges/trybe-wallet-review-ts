@@ -1,6 +1,6 @@
 import {
   ERRORS_MESSAGE,
-  LOGIN_STATE,
+  HANDLE_STATE,
   RESET_FORM,
   LOADING,
 } from "../../types/actionTypes";
@@ -18,7 +18,7 @@ export const loginReducer = (
   action: ActionReducerType
 ) => {
   switch (action.type) {
-    case LOGIN_STATE:
+    case HANDLE_STATE:
       return {
         ...state,
         [action.payload.name]: action.payload.value,

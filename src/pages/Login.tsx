@@ -5,7 +5,7 @@ import {
   actionLoading,
   actionLoginErrors,
   actionResetForm,
-  loginStateUpdate,
+  actionHandleChangeInput,
 } from "../redux/actions";
 import { saveUserLogin } from "../utils/users";
 import { useNavigate } from "react-router-dom";
@@ -15,16 +15,24 @@ import "../styles/screen-size.css";
 
 function Login() {
   const dispatch: Dispatch = useDispatch();
-  const email = useSelector((state: LoginReduxState) => state.email);
-  const password = useSelector((state: LoginReduxState) => state.password);
-  const isLoading = useSelector((state: LoginReduxState) => state.isLoading);
-  const errorMessage = useSelector((state: LoginReduxState) => state.errorMessage);
+  const email = useSelector(
+    (state: LoginReduxState) => state.loginReducer.email
+  );
+  const password = useSelector(
+    (state: LoginReduxState) => state.loginReducer.password
+  );
+  const isLoading = useSelector(
+    (state: LoginReduxState) => state.loginReducer.isLoading
+  );
+  const errorMessage = useSelector(
+    (state: LoginReduxState) => state.loginReducer.errorMessage
+  );
   const navigate = useNavigate();
 
   const handleChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = target;
 
-    return dispatch(loginStateUpdate(name, value));
+    return dispatch(actionHandleChangeInput(name, value));
   };
 
   const resetForm = () => {
@@ -37,10 +45,10 @@ function Login() {
       saveUserLogin(email, password);
       resetForm();
       navigate("/wallet");
-      dispatch(actionLoading(false))
+      dispatch(actionLoading(false));
     }
 
-    dispatch(actionLoading(false))
+    dispatch(actionLoading(false));
   };
 
   const errosValidate = () => {
@@ -53,12 +61,8 @@ function Login() {
   if (isLoading) return <h1>Carregando...</h1>;
 
   return (
-    <div
-      className="d-flex justify-content-center align-items-center screen-full-size"
-    >
-      <Form
-        className="row p-5 shadow-lg bg-success rounded w-25"
-      >
+    <div className="d-flex justify-content-center align-items-center screen-full-size">
+      <Form className="row p-5 shadow-lg bg-success rounded w-25">
         <Form.Group className="mb-3">
           <Form.Label className="fw-bolder text-white">Email: </Form.Label>
           <Form.Control

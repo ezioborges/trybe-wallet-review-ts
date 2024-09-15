@@ -1,33 +1,53 @@
 import {
+  HANDLE_STATE,
+  REQUEST_CURRENCIES_FAILED,
   REQUEST_CURRENCIES_STARTED,
   REQUEST_CURRENCIES_SUCCESSFULL,
 } from "../../types/actionTypes";
-import { ActionCurrencyType } from "../../types/stateTypes";
+import { ActionWalletType } from "../../types/stateTypes";
 
 const initialState = {
-  isFetching: false,
-  currencies: {},
-  errorMessage: [],
+  isLoading: false,
+  currencies: [],
+  errorMessages: [],
+  currency: "",
+  value: 0,
+  method: "",
+  tag: "",
+  description: "",
 };
 
 export const currenciesReducer = (
   state = initialState,
-  action: ActionCurrencyType
+  action: ActionWalletType
 ) => {
   switch (action.type) {
     case REQUEST_CURRENCIES_STARTED:
       return {
         ...state,
-        isFetching: true,
+        isLoading: true,
         currencies: [],
-        errorMessage: [],
+        errorMessages: [],
       };
     case REQUEST_CURRENCIES_SUCCESSFULL:
       return {
         ...state,
-        isFetching: false,
-        currencies: {...action.payload},
+        currencies: action.payload,
+        isLoading: false,
+        errorMessages: [],
       };
+    case REQUEST_CURRENCIES_FAILED:
+      return {
+        ...state,
+        errorMessages: action.payload,
+        currencies: [],
+        isLoading: false,
+      };
+    case HANDLE_STATE:
+      return {
+        ...state,
+        [action.payload.name]: action.payload.value
+      }
     default:
       return state;
   }
