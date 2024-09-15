@@ -4,7 +4,7 @@ import { ThunkDispatch } from "redux-thunk";
 
 
 export type LoginReduxState = {
-  isFetching: boolean;
+  isLoading: boolean;
   email: string;
   password: string;
   errorMessage: string[];

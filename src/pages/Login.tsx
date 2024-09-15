@@ -2,6 +2,7 @@ import { Button, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch, LoginReduxState } from "../types/stateTypes";
 import {
+  actionLoading,
   actionLoginErrors,
   actionResetForm,
   loginStateUpdate,
@@ -9,15 +10,16 @@ import {
 import { saveUserLogin } from "../utils/users";
 import { useNavigate } from "react-router-dom";
 import { validateLogin } from "../utils/validations";
-import { useState } from "react";
 
 import "../styles/screen-size.css";
 
 function Login() {
   const dispatch: Dispatch = useDispatch();
-  const loginState = useSelector((state: LoginReduxState) => state);
+  const email = useSelector((state: LoginReduxState) => state.email);
+  const password = useSelector((state: LoginReduxState) => state.password);
+  const isLoading = useSelector((state: LoginReduxState) => state.isLoading);
+  const errorMessage = useSelector((state: LoginReduxState) => state.errorMessage);
   const navigate = useNavigate();
-  const [isLoad, setIsLoad] = useState<boolean>(false);
 
   const handleChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = target;
@@ -26,32 +28,29 @@ function Login() {
   };
 
   const resetForm = () => {
-    const { email, password } = loginState;
     dispatch(actionResetForm(email, password));
   };
 
   const handleClick = () => {
-    setIsLoad(true);
+    dispatch(actionLoading(true));
     if (errosValidate()) {
-      const { email, password } = loginState;
       saveUserLogin(email, password);
       resetForm();
       navigate("/wallet");
+      dispatch(actionLoading(false))
     }
-    setIsLoad(false);
+
+    dispatch(actionLoading(false))
   };
 
   const errosValidate = () => {
-    const { email, password } = loginState;
     const errors = validateLogin(email, password);
     dispatch(actionLoginErrors(errors));
 
     return errors.length === 0;
   };
 
-  const { email, password, errorMessage } = loginState;
-
-  if (isLoad) return <h1>Carregando...</h1>;
+  if (isLoading) return <h1>Carregando...</h1>;
 
   return (
     <div

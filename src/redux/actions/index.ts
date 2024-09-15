@@ -1,4 +1,4 @@
-import { ERRORS_MESSAGE, LOGIN_STATE, RESET_FORM } from "../../types/actionTypes";
+import { ERRORS_MESSAGE, LOADING, LOGIN_STATE, RESET_FORM } from "../../types/actionTypes";
 
 export const loginStateUpdate = (name: string, value: string) => ({
   type: LOGIN_STATE,
@@ -14,3 +14,8 @@ export const actionLoginErrors = (errors: string[]) => ({
   type: ERRORS_MESSAGE,
   payload: errors,
 });
+
+export const actionLoading = (bool: boolean) => ({
+  type: LOADING,
+  payload: bool
+})

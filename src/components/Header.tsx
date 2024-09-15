@@ -2,7 +2,6 @@ import { getUser } from "../utils/users";
 
 function Header() {
   const {email} = getUser()
-  console.log("🚀 ~ Header ~ userEmail:", email)
   return (
     <nav className="navbar navbar-expand-lg bg-dark p-3">
       <div className="container-fluid">
