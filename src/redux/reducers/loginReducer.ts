@@ -21,13 +21,15 @@ export const loginReducer = (state = initialState, action: ActionReducerType) =>
         ...state,
         email: '',
         password: '',
+        isFetching: false,
       };
     case ERRORS_MESSAGE:
       return {
         ...state,
         email: '',
         password: '',
-        errorMessage: action.payload
+        errorMessage: action.payload,
+        isFetching: false,
       }
     default:
       return state;

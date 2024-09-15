@@ -1,14 +1,17 @@
 import { Outlet, useLocation } from "react-router-dom";
+import Header from "../components/Header";
+
+import '../styles/screen-size.css';
 
 function Layout() {
     const location = useLocation();
 
     const hideHeader = location.pathname === '/'
   return (
-      <>
-      {!hideHeader && <h1>Ta mostrando o Header</h1>}
+      <div className="screen-full-size">
+      {!hideHeader && <Header />}
       <Outlet />
-    </>
+    </div>
   );
 }
 
