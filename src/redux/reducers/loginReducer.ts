@@ -3,7 +3,6 @@ import { ActionReducerType } from "../../types/stateTypes";
 
 
 const initialState = {
-  isFetching: false,
   errorMessage: [],
   email: "",
   password: "",
@@ -21,7 +20,6 @@ export const loginReducer = (state = initialState, action: ActionReducerType) =>
         ...state,
         email: '',
         password: '',
-        isFetching: false,
       };
     case ERRORS_MESSAGE:
       return {
@@ -29,7 +27,6 @@ export const loginReducer = (state = initialState, action: ActionReducerType) =>
         email: '',
         password: '',
         errorMessage: action.payload,
-        isFetching: false,
       }
     default:
       return state;
