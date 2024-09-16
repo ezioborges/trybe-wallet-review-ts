@@ -4,7 +4,7 @@ import {
   RESET_FORM,
   LOADING,
 } from "../../types/actionTypes";
-import { ActionReducerType } from "../../types/stateTypes";
+import { ActionHandleType } from "../../types/stateTypes";
 
 const initialState = {
   errorMessage: [],
@@ -15,7 +15,7 @@ const initialState = {
 
 export const loginReducer = (
   state = initialState,
-  action: ActionReducerType
+  action: ActionHandleType
 ) => {
   switch (action.type) {
     case HANDLE_STATE:

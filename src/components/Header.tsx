@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { getUser } from "../utils/users";
 
 function Header() {
@@ -19,21 +20,20 @@ function Header() {
             <span className="navbar-toggler-icon"></span>
           </button>
         </div>
-        <div
-          className="d-flex justify-content-end px-5 collapse navbar-collapse"
-          id="navbarNav"
-        >
-          <ul className="navbar-nav">
-            <li className="nav-item">
-              <a
+        <div className="d-flex justify-content-between px-5 w-25">
+          <div>
+            <span className="text-white fw-bolder">{`expenses BRL: 0`}</span>
+          </div>
+          <div>
+            <Link to="/">
+              <span
                 className="nav-link active text-white fw-bolder"
                 aria-current="page"
-                href="/"
               >
                 Sair
-              </a>
-            </li>
-          </ul>
+              </span>
+            </Link>
+          </div>
         </div>
       </div>
     </nav>

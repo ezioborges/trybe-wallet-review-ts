@@ -4,7 +4,7 @@ import {
   REQUEST_CURRENCIES_STARTED,
   REQUEST_CURRENCIES_SUCCESSFULL,
 } from "../../types/actionTypes";
-import { ActionWalletType } from "../../types/stateTypes";
+import { ActionHandleType } from "../../types/stateTypes";
 
 const initialState = {
   isLoading: false,
@@ -19,7 +19,7 @@ const initialState = {
 
 export const currenciesReducer = (
   state = initialState,
-  action: ActionWalletType
+  action: ActionHandleType
 ) => {
   switch (action.type) {
     case REQUEST_CURRENCIES_STARTED:
@@ -46,8 +46,8 @@ export const currenciesReducer = (
     case HANDLE_STATE:
       return {
         ...state,
-        [action.payload.name]: action.payload.value
-      }
+        [action.payload.name]: action.payload.value,
+      };
     default:
       return state;
   }

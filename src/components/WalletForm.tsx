@@ -1,8 +1,9 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import "../styles/wallet-form.css";
 import { useDispatch, useSelector } from "react-redux";
 import { actionHandleChangeInput, fetchCurrencies } from "../redux/actions";
 import { CurrenciesReduxState, Dispatch } from "../types/stateTypes";
+import { saveExpenses } from "../utils/users";
 
 function WalletForm() {
   const dispatch: Dispatch = useDispatch();
@@ -13,6 +14,9 @@ function WalletForm() {
     (state: CurrenciesReduxState) => state.currenciesReducer.currencies
   );
 
+  const expenses = useSelector((state: CurrenciesReduxState) => state.currenciesReducer);
+  console.log("🚀 ~ WalletForm ~ expenses:", expenses)
+
   const handleChange = ({
     target,
   }: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -21,11 +25,28 @@ function WalletForm() {
     return dispatch(actionHandleChangeInput(name, value));
   };
 
+  const handleSubmit = (event: React.ChangeEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (expenses) {
+      const newExpenses = {
+        currency: expenses.currency,
+        description: expenses.description,
+        method: expenses.method,
+        tag: expenses.tag,
+        value: expenses.value
+      }   
+      saveExpenses(newExpenses)
+    } else {
+      console.log('não veio ai');
+      
+    }
+  }
+
   useEffect(() => {
     dispatch(fetchCurrencies());
   }, [dispatch]);
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <div className="row d-flex justify-content-between bg-wallet-form">
         <div className="col d-flex align-items-center p-4">
           <label
@@ -57,7 +78,7 @@ function WalletForm() {
             value={currenciesState.currency}
             onChange={handleChange}
           >
-            <option value="" disabled selected>
+            <option defaultValue="select-currency" disabled>
               Selecione uma moeda
             </option>
             {currenciesKeys.map((curr: string) => (
@@ -79,7 +100,7 @@ function WalletForm() {
             data-testid="method-input"
             onChange={handleChange}
           >
-            <option value="" disabled selected>
+            <option defaultValue="select-method" disabled>
               Selecione um método
             </option>
             <option value="cash">Dinheiro</option>
@@ -99,7 +120,7 @@ function WalletForm() {
             data-testid="tag-input"
             onChange={handleChange}
           >
-            <option value="" disabled selected>
+            <option defaultValue="select-tag" disabled>
               Selecione uma categoria
             </option>
             <option value="food">Alimentação</option>
@@ -129,7 +150,7 @@ function WalletForm() {
         </div>
         <div className="col-1 d-flex align-items-center justify-content-center p-4">
           <button type="submit" className="btn btn-danger fw-bolder">
-            Adicionar
+            Adicionar despesa
           </button>
         </div>
       </div>

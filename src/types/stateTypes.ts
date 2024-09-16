@@ -23,28 +23,27 @@ export type CurrenciesReduxState = {
   };
 };
 
-export type LoginPayloadType = {
+export type ExpensesReduxState = {
+  expensesReducer: {
+    currency: string;
+    value: number;
+    method: string;
+    tag: string;
+    description: string;
+  };
+};
+
+export type HandleChangePayload = {
   name: string;
   value: string;
   errorMessage: string[];
 };
 
-export type CurrenciesPayloadType = {
-  name: string;
-  value: string;
-  errorMessage: string[];
-}
-
-export type ActionReducerType = {
+export type ActionHandleType = {
   type: string;
-  payload: LoginPayloadType;
+  payload: HandleChangePayload;
 };
 
-export type ActionWalletType = {
-  type: string;
-  payload: CurrenciesPayloadType;
-};
-
-export type RootState = LoginReduxState & CurrenciesReduxState;
+export type RootState = LoginReduxState & CurrenciesReduxState & ExpensesReduxState;
 
 export type Dispatch = ThunkDispatch<RootState, null, UnknownAction>;
