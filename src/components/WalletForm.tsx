@@ -1,49 +1,85 @@
 import { useEffect, useState } from "react";
-import { fetchCurrencies } from "../redux/actions";
+import { addExpense, fetchCurrencies } from "../redux/actions";
 
-import '../styles/wallet-form.css';
+import "../styles/wallet-form.css";
 import { useDispatch, useSelector } from "react-redux";
-import { Dispatch, FormDataType, WalletReducerStateType } from "../types/stateTypes";
+import {
+  Dispatch,
+  FormDataType,
+  WalletReducerStateType,
+} from "../types/stateTypes";
+import { getCurrencies } from "../utils/getCurrencies";
 
 function WalletForm() {
   const dispatch: Dispatch = useDispatch();
 
-  const walletCurrencies = useSelector((state: WalletReducerStateType) => state.walletReducer);
-  
-  const walletCurrenciesKeys = Object.keys(walletCurrencies.currencies);
-  console.log("🚀 ~ WalletForm ~ walletCurrenciesKeys:", walletCurrenciesKeys)
-  
+  const walletCurrenciesKeys = useSelector(
+    (state: WalletReducerStateType) => state.walletReducer.currencies
+  );
+
+  const [expenseId, setExpenseId] = useState(0);
   const [formData, setFormData] = useState<FormDataType>({
     id: 0,
     value: 0,
-    currency: 'USD',
-    method: 'Dinheiro',
-    tag: 'Alimentação',
-    description: '',
+    currency: "USD",
+    method: "Dinheiro",
+    tag: "Alimentação",
+    description: "",
     exchangeRate: {},
-  })
+  });
 
   useEffect(() => {
     try {
-      dispatch(fetchCurrencies())
+      dispatch(fetchCurrencies());
     } catch (error) {
       console.error("Erro ao buscar moedas:", error);
-      
     }
-  }, [dispatch])
+  }, [dispatch]);
 
-  const handleChange = ({ target }: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = target
+  const handleChange = ({
+    target,
+  }: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = target;
 
     setFormData({
       ...formData,
-      [name]: value
-    })
-  }
+      [name]: value,
+    });
+  };
+
+  const buildExpenses = async () => {
+    try {
+      const currentId = expenseId; // pegado o expenseId atual;
+      const exchange = await getCurrencies();
+
+      const newFormData = {
+        ...formData,
+        exchangeRate: exchange,
+        id: currentId, // adiciona o id atual no novo formData;
+      };
+      
+      setExpenseId((prevId) => prevId + 1); // só adiciona depois para que previna o erro de adicionar id sem a criação de uma nova despesa.
+
+      return newFormData;
+    } catch (error) {
+      console.error("Erro ao criar despesa", error);
+    }
+  };
+
+  const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const updatedFormData = await buildExpenses();
+
+    if (updatedFormData) {
+      dispatch(addExpense(updatedFormData));
+    }
+
+    console.log("veio ai");
+  };
 
   const { value, currency, method, tag, description } = formData;
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <div className="row d-flex justify-content-between bg-wallet-form">
         <div className="col d-flex align-items-center p-4">
           <label
@@ -56,7 +92,6 @@ function WalletForm() {
             data-testid="value-input"
             name="value"
             value={value}
-            type="text"
             className="form-control mx-2"
             id="value-input"
             aria-describedby="value"

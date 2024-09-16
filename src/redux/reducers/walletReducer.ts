@@ -1,4 +1,4 @@
-import { REQUEST_CURRENCIES_FAILED, REQUEST_CURRENCIES_STARTED, REQUEST_CURRENCIES_SUCCESSFULL } from "../../types/actionTypes";
+import { ADD_EXPENSE, REQUEST_CURRENCIES_FAILED, REQUEST_CURRENCIES_STARTED, REQUEST_CURRENCIES_SUCCESSFULL } from "../../types/actionTypes";
 import { WalletReducerStateType } from "../../types/stateTypes";
 
 type WalletActionType = {
@@ -33,6 +33,11 @@ export const walletReducer = (state = initialState, action: WalletActionType) =>
         ...state,
         errorMessages: action.payload,
         currencies: [],
+      }
+    case ADD_EXPENSE:
+      return {
+        ...state,
+        expenses: [...state.expenses, action.payload]
       }
         default:
             return state;

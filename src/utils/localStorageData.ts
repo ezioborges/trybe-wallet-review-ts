@@ -6,7 +6,7 @@ export type LoginType = {
 export type ExpensesType = {
   id: number;
   currency: string;
-  value: string;
+  value: number;
   method: string;
   tag: string;
   description: string;

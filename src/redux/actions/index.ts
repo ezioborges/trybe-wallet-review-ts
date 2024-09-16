@@ -10,6 +10,7 @@ import {
   ADD_EXPENSE,
 } from "../../types/actionTypes";
 import { Dispatch } from "../../types/stateTypes";
+import { getCurrencies } from "../../utils/getCurrencies";
 import { ExpensesType } from "../../utils/localStorageData";
 
 // dispara a handleChange.
@@ -69,11 +70,8 @@ export const fetchCurrencies = () => {
   return async (dispatch: Dispatch) => {
     dispatch(requestCurrenciesStarted());
     try {
-      const response = await fetch(
-        "https://economia.awesomeapi.com.br/json/all"
-      );
-      const data = await response.json();
-      delete data.USDT;
+      const response = await getCurrencies()
+      const data = Object.keys(response)
       dispatch(requestCurrenciesSuccessfull(data));
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
