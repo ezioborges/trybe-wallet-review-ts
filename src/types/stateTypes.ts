@@ -1,7 +1,7 @@
 import { UnknownAction } from "redux";
 import { ThunkDispatch } from "redux-thunk";
 
-export type LoginReduxState = {
+export type LoginReducerStateType = {
   loginReducer: {
     isLoading: boolean;
     email: string;
@@ -10,44 +10,26 @@ export type LoginReduxState = {
   };
 };
 
-export type CurrenciesReduxState = {
-  currenciesReducer: {
-    id: number;
+export type WalletReducerStateType = {
+  walletReducer: {
     isLoading: boolean;
+    editor: boolean;
+    expenses: object[];
+    idToEdit: number;
     currencies: string[];
-    errorMessages: string[];
-    currency: string;
-    value: number;
-    method: string;
-    tag: string;
-    description: string;
   };
 };
 
-export type ExpensesReduxState = {
-  expensesReducer: {
-    id: number;
-    currency: string;
-    value: number;
-    method: string;
-    tag: string;
-    description: string;
-  };
+export type FormDataType = {
+  id: number;
+  value: number;
+  currency: string;
+  method: string;
+  tag: string;
+  description: string;
+  exchangeRate: object;
 };
 
-export type HandleChangePayload = {
-  name: string;
-  value: string;
-  errorMessage: string[];
-};
-
-export type ActionHandleType = {
-  type: string;
-  payload: HandleChangePayload;
-};
-
-export type RootState = LoginReduxState &
-  CurrenciesReduxState &
-  ExpensesReduxState;
+export type RootState = LoginReducerStateType & WalletReducerStateType;
 
 export type Dispatch = ThunkDispatch<RootState, null, UnknownAction>;

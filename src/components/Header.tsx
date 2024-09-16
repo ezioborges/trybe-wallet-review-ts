@@ -1,8 +1,13 @@
 import { Link } from "react-router-dom";
 import { getUser } from "../utils/localStorageData";
 
+
+
 function Header() {
+ 
+
   const { email } = getUser();
+
   return (
     <nav className="navbar navbar-expand-lg bg-dark p-3">
       <div className="container-fluid">

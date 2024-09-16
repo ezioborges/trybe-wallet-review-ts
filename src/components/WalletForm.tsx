@@ -1,54 +1,49 @@
-import React, { useEffect } from "react";
-import "../styles/wallet-form.css";
+import { useEffect, useState } from "react";
+import { fetchCurrencies } from "../redux/actions";
+
+import '../styles/wallet-form.css';
 import { useDispatch, useSelector } from "react-redux";
-import { actionHandleChangeInput, fetchCurrencies } from "../redux/actions";
-import { CurrenciesReduxState, Dispatch } from "../types/stateTypes";
-import { saveExpenses } from "../utils/localStorageData";
+import { Dispatch, FormDataType, WalletReducerStateType } from "../types/stateTypes";
 
 function WalletForm() {
   const dispatch: Dispatch = useDispatch();
-  const currenciesState = useSelector(
-    (state: CurrenciesReduxState) => state.currenciesReducer
-  );
-  const currenciesKeys = useSelector(
-    (state: CurrenciesReduxState) => state.currenciesReducer.currencies
-  );
 
-  const expenses = useSelector(
-    (state: CurrenciesReduxState) => state.currenciesReducer
-  );
-  console.log("🚀 ~ WalletForm ~ expenses:", expenses);
-
-  const handleChange = ({
-    target,
-  }: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = target;
-
-    return dispatch(actionHandleChangeInput(name, value));
-  };
-
-  const handleSubmit = (event: React.ChangeEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (expenses) {
-      const newExpenses = {
-        id: expenses.id,
-        currency: expenses.currency,
-        description: expenses.description,
-        method: expenses.method,
-        tag: expenses.tag,
-        value: expenses.value,
-      };
-      saveExpenses(newExpenses);
-    } else {
-      console.log("não veio ai");
-    }
-  };
+  const walletCurrencies = useSelector((state: WalletReducerStateType) => state.walletReducer);
+  
+  const walletCurrenciesKeys = Object.keys(walletCurrencies.currencies);
+  console.log("🚀 ~ WalletForm ~ walletCurrenciesKeys:", walletCurrenciesKeys)
+  
+  const [formData, setFormData] = useState<FormDataType>({
+    id: 0,
+    value: 0,
+    currency: 'USD',
+    method: 'Dinheiro',
+    tag: 'Alimentação',
+    description: '',
+    exchangeRate: {},
+  })
 
   useEffect(() => {
-    dispatch(fetchCurrencies());
-  }, [dispatch]);
+    try {
+      dispatch(fetchCurrencies())
+    } catch (error) {
+      console.error("Erro ao buscar moedas:", error);
+      
+    }
+  }, [dispatch])
+
+  const handleChange = ({ target }: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = target
+
+    setFormData({
+      ...formData,
+      [name]: value
+    })
+  }
+
+  const { value, currency, method, tag, description } = formData;
   return (
-    <form onSubmit={handleSubmit}>
+    <form>
       <div className="row d-flex justify-content-between bg-wallet-form">
         <div className="col d-flex align-items-center p-4">
           <label
@@ -60,7 +55,7 @@ function WalletForm() {
           <input
             data-testid="value-input"
             name="value"
-            value={currenciesState.value}
+            value={value}
             type="text"
             className="form-control mx-2"
             id="value-input"
@@ -77,13 +72,10 @@ function WalletForm() {
             aria-label="moedas"
             data-testid="currency-input"
             name="currency"
-            value={currenciesState.currency}
+            value={currency}
             onChange={handleChange}
           >
-            <option defaultValue="select-currency" disabled>
-              Selecione uma moeda
-            </option>
-            {currenciesKeys.map((curr: string) => (
+            {walletCurrenciesKeys.map((curr: string) => (
               <option key={curr} value={curr}>
                 {curr}
               </option>
@@ -91,20 +83,14 @@ function WalletForm() {
           </select>
         </div>
         <div className="col d-flex align-items-center p-4">
-          <label htmlFor="method" className="text-white fw-bolder">
-            Método de pagamento
-          </label>
           <select
             className="form-select form-control"
             aria-label="método de pagamento"
             name="method"
-            value={currenciesState.method}
+            value={method}
             data-testid="method-input"
             onChange={handleChange}
           >
-            <option defaultValue="select-method" disabled>
-              Selecione um método
-            </option>
             <option value="cash">Dinheiro</option>
             <option value="credit">Cartão de crédito</option>
             <option value="debit">Cartão de débito</option>
@@ -118,13 +104,10 @@ function WalletForm() {
             className="form-select mx-2"
             aria-label="tags"
             name="tag"
-            value={currenciesState.tag}
+            value={tag}
             data-testid="tag-input"
             onChange={handleChange}
           >
-            <option defaultValue="select-tag" disabled>
-              Selecione uma categoria
-            </option>
             <option value="food">Alimentação</option>
             <option value="leisure">Lazer</option>
             <option value="work">Trabalho</option>
@@ -143,14 +126,14 @@ function WalletForm() {
             data-testid="description-input"
             name="description"
             type="text"
-            value={currenciesState.description}
+            value={description}
             className="form-control mx-2"
             id="description"
             aria-describedby="description"
             onChange={handleChange}
           />
         </div>
-        <div className="col-1 d-flex align-items-center justify-content-center p-4">
+        <div className="col d-flex align-items-center justify-content-center p-2">
           <button type="submit" className="btn btn-danger fw-bolder">
             Adicionar despesa
           </button>
