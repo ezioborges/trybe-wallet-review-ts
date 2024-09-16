@@ -12,6 +12,7 @@ export type LoginReduxState = {
 
 export type CurrenciesReduxState = {
   currenciesReducer: {
+    id: number;
     isLoading: boolean;
     currencies: string[];
     errorMessages: string[];
@@ -25,6 +26,7 @@ export type CurrenciesReduxState = {
 
 export type ExpensesReduxState = {
   expensesReducer: {
+    id: number;
     currency: string;
     value: number;
     method: string;
@@ -44,6 +46,8 @@ export type ActionHandleType = {
   payload: HandleChangePayload;
 };
 
-export type RootState = LoginReduxState & CurrenciesReduxState & ExpensesReduxState;
+export type RootState = LoginReduxState &
+  CurrenciesReduxState &
+  ExpensesReduxState;
 
 export type Dispatch = ThunkDispatch<RootState, null, UnknownAction>;

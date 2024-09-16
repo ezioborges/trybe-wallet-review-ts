@@ -3,7 +3,7 @@ import "../styles/wallet-form.css";
 import { useDispatch, useSelector } from "react-redux";
 import { actionHandleChangeInput, fetchCurrencies } from "../redux/actions";
 import { CurrenciesReduxState, Dispatch } from "../types/stateTypes";
-import { saveExpenses } from "../utils/users";
+import { saveExpenses } from "../utils/localStorageData";
 
 function WalletForm() {
   const dispatch: Dispatch = useDispatch();
@@ -14,8 +14,10 @@ function WalletForm() {
     (state: CurrenciesReduxState) => state.currenciesReducer.currencies
   );
 
-  const expenses = useSelector((state: CurrenciesReduxState) => state.currenciesReducer);
-  console.log("🚀 ~ WalletForm ~ expenses:", expenses)
+  const expenses = useSelector(
+    (state: CurrenciesReduxState) => state.currenciesReducer
+  );
+  console.log("🚀 ~ WalletForm ~ expenses:", expenses);
 
   const handleChange = ({
     target,
@@ -29,18 +31,18 @@ function WalletForm() {
     event.preventDefault();
     if (expenses) {
       const newExpenses = {
+        id: expenses.id,
         currency: expenses.currency,
         description: expenses.description,
         method: expenses.method,
         tag: expenses.tag,
-        value: expenses.value
-      }   
-      saveExpenses(newExpenses)
+        value: expenses.value,
+      };
+      saveExpenses(newExpenses);
     } else {
-      console.log('não veio ai');
-      
+      console.log("não veio ai");
     }
-  }
+  };
 
   useEffect(() => {
     dispatch(fetchCurrencies());

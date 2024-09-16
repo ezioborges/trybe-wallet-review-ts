@@ -4,6 +4,7 @@ export type LoginType = {
 };
 
 export type ExpensesType = {
+  id: number;
   currency: string;
   value: number;
   method: string;
@@ -28,8 +29,13 @@ export const getExpenses = () => {
 };
 
 export const saveExpenses = (newExpenses: ExpensesType) => {
-  const expenses = getExpenses();
-  const updatedExpenses = [...expenses, newExpenses];
+  const expenses: ExpensesType[] = getExpenses();
+
+  const nextId =
+    expenses.length ? Math.max(...expenses.map((exp: ExpensesType) => exp.id)) + 1 : 0;
+  const newExpenseWithId = { ...newExpenses, id: nextId };
+
+  const updatedExpenses = [...expenses, newExpenseWithId];
 
   localStorage.setItem(EXPENSES_KEY, JSON.stringify(updatedExpenses));
 };

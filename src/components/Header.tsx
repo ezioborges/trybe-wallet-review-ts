@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { getUser } from "../utils/users";
+import { getUser } from "../utils/localStorageData";
 
 function Header() {
   const { email } = getUser();
