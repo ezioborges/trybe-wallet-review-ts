@@ -1,4 +1,11 @@
+import { useSelector } from "react-redux";
+import { WalletReducerStateType } from "../types/stateTypes";
+import { updatedValue } from "../utils/updateValues";
+
 function WalletTable() {
+  const globalExpenses = useSelector((state: WalletReducerStateType) => state.walletReducer.expenses)
+  console.log("🚀 ~ WalletTable ~ globalExpenses:", globalExpenses)
+  
   return (
     <div className="d-flex justify-content-center">
       <table className="table table-primary table-hover">
@@ -15,7 +22,20 @@ function WalletTable() {
             <th scope="col">Editar/Excluir</th>
           </tr>
         </thead>
-        <tbody>{/* aqui vai ser os ele mentos do table body*/}</tbody>
+        <tbody>
+          {globalExpenses && (
+            globalExpenses.map(({id, description, tag, method, value}) => (
+              <tr key={id}>
+                <td>
+                  {description}
+                </td>
+                <td>{ tag }</td>
+                <td>{ method }</td>
+                <td>{ updatedValue(value) }</td>
+              </tr>
+            ))
+          ) }
+        </tbody>
       </table>
     </div>
   );
