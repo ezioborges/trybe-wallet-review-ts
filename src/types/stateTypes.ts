@@ -22,14 +22,31 @@ export type WalletReducerStateType = {
 };
 
 export type FormDataType = {
-  id: number,
-    value: number,
-    currency: string,
-    method: string,
-    tag: string,
-    description: string,
-    exchangeValue: number,
-    exchangeRate: object,
+  id: number;
+  value: number;
+  currency: string;
+  method: string;
+  tag: string;
+  description: string;
+  exchangeValue: number;
+  exchangeRate: object;
+};
+
+export type TableExpensesType = {
+  id: number;
+  description: string;
+  tag: string;
+  method: string;
+  value: string;
+  exchangeRate: ExchangeRateType;
+  currency: string;
+};
+
+type ExchangeRateType = {
+  [key: string]: {
+    name: string;
+    ask: number;
+  };
 };
 
 export type RootState = LoginReducerStateType & WalletReducerStateType;
