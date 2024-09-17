@@ -95,8 +95,8 @@ function WalletForm() {
   const { value, currency, method, tag, description } = formData;
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="row d-flex justify-content-between bg-wallet-form">
+    <div className="container-fluid bg-wallet-form">
+      <form onSubmit={handleSubmit} className="row">
         <div className="col d-flex align-items-center p-4">
           <label
             htmlFor="value-input"
@@ -190,8 +190,8 @@ function WalletForm() {
             Adicionar despesa
           </button>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
   );
 }
 
