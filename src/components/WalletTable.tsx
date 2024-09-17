@@ -1,12 +1,23 @@
-import { useSelector } from "react-redux";
-import { TableExpensesType, WalletReducerStateType } from "../types/stateTypes";
+import { useDispatch, useSelector } from "react-redux";
+import { Dispatch, TableExpensesType, WalletReducerStateType } from "../types/stateTypes";
 import { updatedValue } from "../utils/updateValues";
+import { newExpensesArray } from "../redux/actions";
 
 function WalletTable() {
+  const dispatch: Dispatch = useDispatch();
   const globalExpenses = useSelector(
     (state: WalletReducerStateType) =>
       state.walletReducer.expenses as TableExpensesType[]
   );
+
+  const handleDelete = (id: number) => {
+    const filteredItems = globalExpenses.filter(
+      (expense) => expense.id !== +id
+    );
+
+    dispatch(newExpensesArray(filteredItems))
+    console.log("🚀 ~ WalletTable ~ filteredItems:", filteredItems);
+  };
 
   return (
     <div className="d-flex justify-content-center">
@@ -69,7 +80,12 @@ function WalletTable() {
                 <td className="text-center">{expenses.currency}</td>
                 <td className="text-center">
                   <button className="me-2 btn btn-success">Editar</button>
-                  <button className="btn btn-danger btn-small">Excluir</button>
+                  <button
+                    className="btn btn-danger btn-small"
+                    onClick={() => handleDelete(expenses.id)}
+                  >
+                    Excluir
+                  </button>
                 </td>
               </tr>
             ))}

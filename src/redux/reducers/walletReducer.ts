@@ -1,5 +1,6 @@
 import {
   ADD_EXPENSE,
+  NEW_EXPENSES_ARRAY,
   REQUEST_CURRENCIES_FAILED,
   REQUEST_CURRENCIES_STARTED,
   REQUEST_CURRENCIES_SUCCESSFULL,
@@ -48,6 +49,11 @@ export const walletReducer = (
         ...state,
         expenses: [...state.expenses, action.payload],
       };
+    case NEW_EXPENSES_ARRAY: 
+      return {
+        ...state,
+        expenses: action.payload
+      }
     default:
       return state;
   }

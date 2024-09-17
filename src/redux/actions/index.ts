@@ -7,8 +7,9 @@ import {
   REQUEST_CURRENCIES_SUCCESSFULL,
   RESET_FORM,
   ADD_EXPENSE,
+  NEW_EXPENSES_ARRAY,
 } from "../../types/actionTypes";
-import { Dispatch, FormDataType } from "../../types/stateTypes";
+import { Dispatch, FormDataType, TableExpensesType } from "../../types/stateTypes";
 import { getCurrencies } from "../../utils/getCurrencies";
 
 // dispara a handleChange.
@@ -58,12 +59,18 @@ export const addExpense = (newExpenses: FormDataType) => ({
   payload: newExpenses,
 });
 
+// cria o novo array após deletar um item do array 
+export const newExpensesArray = (newExpenses: TableExpensesType[]) => ({
+  type: NEW_EXPENSES_ARRAY,
+  payload: newExpenses,
+});
+
 export const fetchCurrencies = () => {
   return async (dispatch: Dispatch) => {
     dispatch(requestCurrenciesStarted());
     try {
-      const response = await getCurrencies()
-      const data = Object.keys(response)
+      const response = await getCurrencies();
+      const data = Object.keys(response);
       dispatch(requestCurrenciesSuccessfull(data));
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
