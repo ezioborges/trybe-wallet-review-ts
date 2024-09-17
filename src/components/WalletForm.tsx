@@ -18,7 +18,6 @@ function WalletForm() {
   );
 
   const [expenseId, setExpenseId] = useState(0);
-  const [isLoad, setIsLoad] = useState(false);
   const [formData, setFormData] = useState<FormDataType>({
     id: 0,
     value: 0,
@@ -29,6 +28,17 @@ function WalletForm() {
     exchangeValue: 0,
     exchangeRate: {},
   });
+
+  const initialState = {
+    id: 0,
+    value: 0,
+    currency: "USD",
+    method: "Dinheiro",
+    tag: "Alimentação",
+    description: "",
+    exchangeValue: 0,
+    exchangeRate: {},
+  };
 
   useEffect(() => {
     try {
@@ -74,18 +84,16 @@ function WalletForm() {
 
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoad(true);
     const updatedFormData = await buildExpenses();
 
     if (updatedFormData) {
       dispatch(addExpense(updatedFormData));
     }
-
-    setIsLoad(false);
+    setFormData(initialState);
   };
 
   const { value, currency, method, tag, description } = formData;
-  if (isLoad) return <h1>Carregando...</h1>;
+
   return (
     <form onSubmit={handleSubmit}>
       <div className="row d-flex justify-content-between bg-wallet-form">
@@ -98,6 +106,7 @@ function WalletForm() {
           </label>
           <input
             data-testid="value-input"
+            type="number"
             name="value"
             value={value}
             className="form-control mx-2"

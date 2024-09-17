@@ -3,7 +3,6 @@ import {
   REQUEST_CURRENCIES_FAILED,
   REQUEST_CURRENCIES_STARTED,
   REQUEST_CURRENCIES_SUCCESSFULL,
-  TOTAL_EXPENSES,
 } from "../../types/actionTypes";
 import { WalletReducerStateType } from "../../types/stateTypes";
 
@@ -42,18 +41,13 @@ export const walletReducer = (
         ...state,
         errorMessages: action.payload,
         currencies: [],
+        isLoading: false,
       };
     case ADD_EXPENSE:
-      
       return {
         ...state,
         expenses: [...state.expenses, action.payload],
       };
-    case TOTAL_EXPENSES: 
-      return {
-        ...state,
-        expensesAmount: action.payload
-      }
     default:
       return state;
   }

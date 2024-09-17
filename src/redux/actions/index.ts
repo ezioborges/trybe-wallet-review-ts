@@ -6,12 +6,10 @@ import {
   REQUEST_CURRENCIES_STARTED,
   REQUEST_CURRENCIES_SUCCESSFULL,
   RESET_FORM,
-  TOTAL_EXPENSES,
   ADD_EXPENSE,
 } from "../../types/actionTypes";
-import { Dispatch } from "../../types/stateTypes";
+import { Dispatch, FormDataType } from "../../types/stateTypes";
 import { getCurrencies } from "../../utils/getCurrencies";
-import { ExpensesType } from "../../utils/localStorageData";
 
 // dispara a handleChange.
 export const actionHandleChangeInput = (name: string, value: string) => ({
@@ -55,15 +53,9 @@ export const requestCurrenciesFailed = (errors: string[]) => ({
 });
 
 // adiciona uma nova despesa
-export const addExpense = (newExpenses: ExpensesType) => ({
+export const addExpense = (newExpenses: FormDataType) => ({
   type: ADD_EXPENSE,
   payload: newExpenses,
-});
-
-//calcula o valor total das despesas
-export const totalExpenses = (total: number) => ({
-  type: TOTAL_EXPENSES,
-  payload: total,
 });
 
 export const fetchCurrencies = () => {
