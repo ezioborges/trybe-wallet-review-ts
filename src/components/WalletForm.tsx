@@ -18,6 +18,7 @@ function WalletForm() {
   );
 
   const [expenseId, setExpenseId] = useState(0);
+  const [isLoad, setIsLoad] = useState(false);
   const [formData, setFormData] = useState<FormDataType>({
     id: 0,
     value: 0,
@@ -25,6 +26,7 @@ function WalletForm() {
     method: "Dinheiro",
     tag: "Alimentação",
     description: "",
+    exchangeValue: 0,
     exchangeRate: {},
   });
 
@@ -52,12 +54,16 @@ function WalletForm() {
       const currentId = expenseId; // pegado o expenseId atual;
       const exchange = await getCurrencies();
 
+      const exchangeRate = exchange[formData.currency];
+      const convertedValue = formData.value * exchangeRate.ask;
+
       const newFormData = {
         ...formData,
         exchangeRate: exchange,
         id: currentId, // adiciona o id atual no novo formData;
+        exchangeValue: convertedValue,
       };
-      
+
       setExpenseId((prevId) => prevId + 1); // só adiciona depois para que previna o erro de adicionar id sem a criação de uma nova despesa.
 
       return newFormData;
@@ -68,16 +74,18 @@ function WalletForm() {
 
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoad(true);
     const updatedFormData = await buildExpenses();
 
     if (updatedFormData) {
       dispatch(addExpense(updatedFormData));
     }
 
-    console.log("veio ai");
+    setIsLoad(false);
   };
 
   const { value, currency, method, tag, description } = formData;
+  if (isLoad) return <h1>Carregando...</h1>;
   return (
     <form onSubmit={handleSubmit}>
       <div className="row d-flex justify-content-between bg-wallet-form">

@@ -17,17 +17,19 @@ export type WalletReducerStateType = {
     expenses: object[];
     idToEdit: number;
     currencies: string[];
+    expenseAmount: number[];
   };
 };
 
 export type FormDataType = {
-  id: number;
-  value: number;
-  currency: string;
-  method: string;
-  tag: string;
-  description: string;
-  exchangeRate: object;
+  id: number,
+    value: number,
+    currency: string,
+    method: string,
+    tag: string,
+    description: string,
+    exchangeValue: number,
+    exchangeRate: object,
 };
 
 export type RootState = LoginReducerStateType & WalletReducerStateType;

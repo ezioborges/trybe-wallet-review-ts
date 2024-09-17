@@ -1,4 +1,10 @@
-import { ADD_EXPENSE, REQUEST_CURRENCIES_FAILED, REQUEST_CURRENCIES_STARTED, REQUEST_CURRENCIES_SUCCESSFULL } from "../../types/actionTypes";
+import {
+  ADD_EXPENSE,
+  REQUEST_CURRENCIES_FAILED,
+  REQUEST_CURRENCIES_STARTED,
+  REQUEST_CURRENCIES_SUCCESSFULL,
+  TOTAL_EXPENSES,
+} from "../../types/actionTypes";
 import { WalletReducerStateType } from "../../types/stateTypes";
 
 type WalletActionType = {
@@ -15,31 +21,40 @@ const initialState = {
   idToEdit: 0, // valor numérico que armazena o id da despesa que esta sendo editada
 };
 
-export const walletReducer = (state = initialState, action: WalletActionType) => {
+export const walletReducer = (
+  state = initialState,
+  action: WalletActionType
+) => {
   switch (action.type) {
     case REQUEST_CURRENCIES_STARTED:
       return {
         ...state,
         isLoading: true,
-      }
+      };
     case REQUEST_CURRENCIES_SUCCESSFULL:
       return {
         ...state,
         currencies: action.payload,
-        isLoading: false
-      }
+        isLoading: false,
+      };
     case REQUEST_CURRENCIES_FAILED:
       return {
         ...state,
         errorMessages: action.payload,
         currencies: [],
-      }
+      };
     case ADD_EXPENSE:
+      
       return {
         ...state,
-        expenses: [...state.expenses, action.payload]
+        expenses: [...state.expenses, action.payload],
+      };
+    case TOTAL_EXPENSES: 
+      return {
+        ...state,
+        expensesAmount: action.payload
       }
-        default:
-            return state;
-    }
+    default:
+      return state;
+  }
 };

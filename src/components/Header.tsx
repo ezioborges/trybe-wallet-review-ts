@@ -1,12 +1,21 @@
 import { Link } from "react-router-dom";
 import { getUser } from "../utils/localStorageData";
-
-
+import { useSelector } from "react-redux";
+import { FormDataType, WalletReducerStateType } from "../types/stateTypes";
 
 function Header() {
- 
+  const globalExpenses = useSelector(
+    (state: WalletReducerStateType) => state.walletReducer.expenses as FormDataType[]
+  );
+
+
+  const totalGlobalExpenses = globalExpenses.reduce((total, expense) => (
+    total + (expense.exchangeValue || 0)
+  ), 0);
+
 
   const { email } = getUser();
+  const editedValue = totalGlobalExpenses.toFixed(2).replace('.', ',')
 
   return (
     <nav className="navbar navbar-expand-lg bg-dark p-3">
@@ -27,7 +36,7 @@ function Header() {
         </div>
         <div className="d-flex justify-content-between px-5 w-25">
           <div>
-            <span className="text-white fw-bolder">{`expenses BRL: 0`}</span>
+            <span className="text-white fw-bolder">{`Total das despesa em BRL: ${editedValue}`}</span>
           </div>
           <div>
             <Link to="/">
