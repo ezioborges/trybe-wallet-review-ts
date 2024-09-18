@@ -6,14 +6,16 @@ import { updatedValue } from "../utils/updateValues";
 
 function Header() {
   const globalExpenses = useSelector(
-    (state: WalletReducerStateType) => state.walletReducer.expenses as FormDataType[]
+    (state: WalletReducerStateType) =>
+      state.walletReducer.expenses as FormDataType[]
   );
 
+  const totalGlobalExpenses = globalExpenses.reduce(
+    (total, expense) => total + (expense.exchangeValue || 0),
+    0
+  );
 
-  const totalGlobalExpenses = globalExpenses.reduce((total, expense) => (
-    total + (expense.exchangeValue || 0)
-  ), 0);
-
+  const totalExpenses = totalGlobalExpenses.toString();
 
   const { email } = getUser();
 
@@ -36,7 +38,9 @@ function Header() {
         </div>
         <div className="d-flex justify-content-between px-5 w-25">
           <div>
-            <span className="text-white fw-bolder">{`Total das despesa em BRL: ${updatedValue(totalGlobalExpenses)}`}</span>
+            <span className="text-white fw-bolder">{`Total das despesa em BRL: ${updatedValue(
+              totalExpenses
+            )}`}</span>
           </div>
           <div>
             <Link to="/">

@@ -1,6 +1,6 @@
 import { Button, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { Dispatch, LoginReduxState } from "../types/stateTypes";
+import { Dispatch, LoginReducerStateType } from "../types/stateTypes";
 import {
   actionLoading,
   actionLoginErrors,
@@ -16,16 +16,16 @@ import "../styles/screen-size.css";
 function Login() {
   const dispatch: Dispatch = useDispatch();
   const email = useSelector(
-    (state: LoginReduxState) => state.loginReducer.email
+    (state: LoginReducerStateType) => state.loginReducer.email
   );
   const password = useSelector(
-    (state: LoginReduxState) => state.loginReducer.password
+    (state: LoginReducerStateType) => state.loginReducer.password
   );
   const isLoading = useSelector(
-    (state: LoginReduxState) => state.loginReducer.isLoading
+    (state: LoginReducerStateType) => state.loginReducer.isLoading
   );
   const errorMessage = useSelector(
-    (state: LoginReduxState) => state.loginReducer.errorMessage
+    (state: LoginReducerStateType) => state.loginReducer.errorMessage
   );
   const navigate = useNavigate();
 

@@ -1,6 +1,15 @@
 import { UnknownAction } from "redux";
 import { ThunkDispatch } from "redux-thunk";
 
+
+export type ActionHandleType = {
+  type: string;
+  payload: {
+    name: string;
+    value: string;
+  };
+};
+
 export type LoginReducerStateType = {
   loginReducer: {
     isLoading: boolean;
