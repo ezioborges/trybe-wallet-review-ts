@@ -1,5 +1,7 @@
 import {
   ADD_EXPENSE,
+  EDIT_EXPENSES_FINISHED,
+  EDIT_EXPENSES_STARTED,
   NEW_EXPENSES_ARRAY,
   REQUEST_CURRENCIES_FAILED,
   REQUEST_CURRENCIES_STARTED,
@@ -49,10 +51,21 @@ export const walletReducer = (
         ...state,
         expenses: [...state.expenses, action.payload],
       };
-    case NEW_EXPENSES_ARRAY: 
+    case NEW_EXPENSES_ARRAY:
       return {
         ...state,
-        expenses: action.payload
+        expenses: action.payload,
+      };
+    case EDIT_EXPENSES_STARTED:
+      return {
+        ...state,
+        editor: true,
+        idToEdit: action.payload,
+      };
+    case EDIT_EXPENSES_FINISHED:
+      return {
+        ...state,
+        editor: false,
       }
     default:
       return state;

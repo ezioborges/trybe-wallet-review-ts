@@ -1,13 +1,17 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Dispatch, TableExpensesType, WalletReducerStateType } from "../types/stateTypes";
+import {
+  Dispatch,
+  FormDataType,
+  WalletReducerStateType,
+} from "../types/stateTypes";
 import { updatedValue } from "../utils/updateValues";
-import { newExpensesArray } from "../redux/actions";
+import { editExpensesStarted, newExpensesArray } from "../redux/actions";
 
 function WalletTable() {
   const dispatch: Dispatch = useDispatch();
   const globalExpenses = useSelector(
     (state: WalletReducerStateType) =>
-      state.walletReducer.expenses as TableExpensesType[]
+      state.walletReducer.expenses as FormDataType[]
   );
 
   const handleDelete = (id: number) => {
@@ -15,8 +19,11 @@ function WalletTable() {
       (expense) => expense.id !== +id
     );
 
-    dispatch(newExpensesArray(filteredItems))
-    console.log("🚀 ~ WalletTable ~ filteredItems:", filteredItems);
+    dispatch(newExpensesArray(filteredItems));
+  };
+
+  const handleEdit = (id: number) => {
+    dispatch(editExpensesStarted(id))
   };
 
   return (
@@ -79,7 +86,12 @@ function WalletTable() {
                 </td>
                 <td className="text-center">{expenses.currency}</td>
                 <td className="text-center">
-                  <button className="me-2 btn btn-success">Editar</button>
+                  <button
+                    className="me-2 btn btn-success"
+                    onClick={() => handleEdit(expenses.id)}
+                  >
+                    Editar
+                  </button>
                   <button
                     className="btn btn-danger btn-small"
                     onClick={() => handleDelete(expenses.id)}

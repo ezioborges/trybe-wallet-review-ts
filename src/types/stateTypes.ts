@@ -14,7 +14,7 @@ export type WalletReducerStateType = {
   walletReducer: {
     isLoading: boolean;
     editor: boolean;
-    expenses: object[];
+    expenses: FormDataType[];
     idToEdit: number;
     currencies: string[];
     expenseAmount: number[];
@@ -23,13 +23,13 @@ export type WalletReducerStateType = {
 
 export type FormDataType = {
   id: number;
-  value: number;
+  value: string;
   currency: string;
   method: string;
   tag: string;
   description: string;
   exchangeValue: number;
-  exchangeRate: object;
+  exchangeRate: ExchangeRateType;
 };
 
 export type TableExpensesType = {

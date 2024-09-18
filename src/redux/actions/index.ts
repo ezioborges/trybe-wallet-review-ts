@@ -8,8 +8,14 @@ import {
   RESET_FORM,
   ADD_EXPENSE,
   NEW_EXPENSES_ARRAY,
+  EDIT_EXPENSES_STARTED,
+  EDIT_EXPENSES_FINISHED,
 } from "../../types/actionTypes";
-import { Dispatch, FormDataType, TableExpensesType } from "../../types/stateTypes";
+import {
+  Dispatch,
+  FormDataType,
+  TableExpensesType,
+} from "../../types/stateTypes";
 import { getCurrencies } from "../../utils/getCurrencies";
 
 // dispara a handleChange.
@@ -59,10 +65,19 @@ export const addExpense = (newExpenses: FormDataType) => ({
   payload: newExpenses,
 });
 
-// cria o novo array após deletar um item do array 
+// cria o novo array após deletar um item do array
 export const newExpensesArray = (newExpenses: TableExpensesType[]) => ({
   type: NEW_EXPENSES_ARRAY,
   payload: newExpenses,
+});
+
+export const editExpensesStarted = (id: number) => ({
+  type: EDIT_EXPENSES_STARTED,
+  payload: id,
+});
+
+export const editExpensesFinished = () => ({
+  type: EDIT_EXPENSES_FINISHED,
 });
 
 export const fetchCurrencies = () => {

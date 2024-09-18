@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { addExpense, fetchCurrencies } from "../redux/actions";
+import {
+  addExpense,
+  editExpensesFinished,
+  fetchCurrencies,
+  newExpensesArray,
+} from "../redux/actions";
 
 import "../styles/wallet-form.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,10 +22,14 @@ function WalletForm() {
     (state: WalletReducerStateType) => state.walletReducer.currencies
   );
 
+  const globalWallet = useSelector(
+    (state: WalletReducerStateType) => state.walletReducer
+  );
+
   const [expenseId, setExpenseId] = useState(0);
   const [formData, setFormData] = useState<FormDataType>({
     id: 0,
-    value: 0,
+    value: "0",
     currency: "USD",
     method: "Dinheiro",
     tag: "Alimentação",
@@ -31,7 +40,7 @@ function WalletForm() {
 
   const initialState = {
     id: 0,
-    value: 0,
+    value: "0",
     currency: "USD",
     method: "Dinheiro",
     tag: "Alimentação",
@@ -65,7 +74,7 @@ function WalletForm() {
       const exchange = await getCurrencies();
 
       const exchangeRate = exchange[formData.currency];
-      const convertedValue = formData.value * exchangeRate.ask;
+      const convertedValue = +formData.value * exchangeRate.ask;
 
       const newFormData = {
         ...formData,
@@ -76,21 +85,72 @@ function WalletForm() {
 
       setExpenseId((prevId) => prevId + 1); // só adiciona depois para que previna o erro de adicionar id sem a criação de uma nova despesa.
 
-      return newFormData;
+      return newFormData
     } catch (error) {
       console.error("Erro ao criar despesa", error);
     }
   };
 
-  const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const updatedFormData = await buildExpenses();
+  const updateButton = async () => {
+    const { expenses, idToEdit } = globalWallet;
+    
+    const expensesBuilded = await buildExpenses();
 
-    if (updatedFormData) {
-      dispatch(addExpense(updatedFormData));
+    if (expensesBuilded) {
+      const editedExpense = expenses.map((expense) =>
+        expense.id === idToEdit
+          ? {
+              ...expense,
+              ...expensesBuilded,
+            }
+          : expense
+      );
+
+      dispatch(newExpensesArray(editedExpense))
+      dispatch(editExpensesFinished());
     }
+
     setFormData(initialState);
   };
+
+  const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const newExpense = await buildExpenses()
+
+    if (globalWallet.editor) {
+      await updateButton();
+    } else {
+      if (newExpense) {
+        dispatch(addExpense(newExpense))
+      }
+    }
+
+    setFormData(initialState);
+  };
+
+  const editorMode = () => {
+    const { editor, expenses, idToEdit } = globalWallet;
+
+
+    const expenseToEdit = expenses.find(
+      (expense: FormDataType) => expense.id === idToEdit
+    );
+    if (editor && expenseToEdit) {
+      setFormData({
+        ...formData,
+        value: expenseToEdit.value,
+        description: expenseToEdit.description,
+        currency: expenseToEdit.currency,
+        method: expenseToEdit.method,
+        tag: expenseToEdit.tag,
+      });
+    }
+  };
+
+  useEffect(() => {
+    editorMode();
+  }, [globalWallet.editor]);
+
 
   const { value, currency, method, tag, description } = formData;
 
@@ -143,9 +203,9 @@ function WalletForm() {
             data-testid="method-input"
             onChange={handleChange}
           >
-            <option value="cash">Dinheiro</option>
-            <option value="credit">Cartão de crédito</option>
-            <option value="debit">Cartão de débito</option>
+            <option value="Dinheiro">Dinheiro</option>
+            <option value="Cartão de crédito">Cartão de crédito</option>
+            <option value="Cartão de débito">Cartão de débito</option>
           </select>
         </div>
         <div className="col d-flex align-items-center p-4">
@@ -160,11 +220,11 @@ function WalletForm() {
             data-testid="tag-input"
             onChange={handleChange}
           >
-            <option value="food">Alimentação</option>
-            <option value="leisure">Lazer</option>
-            <option value="work">Trabalho</option>
-            <option value="transport">Transporte</option>
-            <option value="health">Saúde</option>
+            <option value="Alimentação">Alimentação</option>
+            <option value="Lazer">Lazer</option>
+            <option value="Trabalho">Trabalho</option>
+            <option value="Transporte">Transporte</option>
+            <option value="Saúde">Saúde</option>
           </select>
         </div>
         <div className="col d-flex align-items-center p-4">
@@ -187,7 +247,7 @@ function WalletForm() {
         </div>
         <div className="col d-flex align-items-center justify-content-center p-2">
           <button type="submit" className="btn btn-danger fw-bolder">
-            Adicionar despesa
+            {globalWallet.editor ? "Finalizar Edição" : "Adicionar despesa"}
           </button>
         </div>
       </form>
